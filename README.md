@@ -135,7 +135,7 @@ Install-Module Pester -Force -SkipPublisherCheck
 Invoke-Pester
 
 # Run specific test suite
-Invoke-Pester -Path "./tests/test-cross-platform.tests.ps1"
+Invoke-Pester -Path "./tests/test-Get-ProcessReport.ps1"
 ```
 
 ## 🔧 Configuration
