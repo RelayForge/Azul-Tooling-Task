@@ -3,10 +3,10 @@ name: PowerShell CI
 on:
   push:
     branches:
-      - feat--use-as-IaC-DSC
+      - main
   pull_request:
     branches:
-      - feat--use-as-IaC-DSC
+      - main
 
 jobs:
   test:
