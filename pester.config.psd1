@@ -1,0 +1,5 @@
+@{
+    TestDirectory = 'tests'
+    Modules = @()
+    Dependencies = @()
+}

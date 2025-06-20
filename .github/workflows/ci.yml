@@ -1,0 +1,57 @@
+name: PowerShell CI
+
+on:
+  push:
+    branches:
+      - feat--use-as-IaC-DSC
+  pull_request:
+    branches:
+      - feat--use-as-IaC-DSC
+
+jobs:
+  test:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Verify PowerShell version
+      run: |
+        Write-Host "PowerShell Version:"
+        $PSVersionTable
+        Write-Host "PowerShell Executable Path:"
+        (Get-Command pwsh).Source
+      shell: pwsh
+      
+    - name: Run Pester tests
+      run: |
+        # Install Pester if not available
+        if (-not (Get-Module -ListAvailable -Name Pester)) {
+          Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser
+        }
+        
+        # Import Pester
+        Import-Module Pester -Force
+        
+        # Run specific tests
+        $testFiles = @(
+          "./tests/test-Get-ProcessReport.ps1"
+        )
+        
+        $testResults = Invoke-Pester -Path $testFiles -OutputFormat NUnitXml -OutputFile "TestResults.xml" -PassThru
+        
+        if ($testResults.FailedCount -gt 0) {
+          Write-Error "Tests failed: $($testResults.FailedCount) out of $($testResults.TotalCount)"
+          exit 1
+        }
+        
+        Write-Host "All tests passed: $($testResults.PassedCount) out of $($testResults.TotalCount)"
+      shell: pwsh
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: TestResults.xml

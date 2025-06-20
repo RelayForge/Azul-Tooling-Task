@@ -1,0 +1,20 @@
+# Reports folder - exclude all generated report files
+reports/*
+
+# Keep the reports directory structure but ignore content
+!reports/.gitkeep
+!dsc/compiled/.gitkeep
+
+# PowerShell specific
+*.ps1xml
+
+# IDE and editor files
+.vscode/
+*.swp
+*.swo
+*~
+dsc/compiled/*
+
+# OS specific files
+.DS_Store
+Thumbs.db
